@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":ios:main" external.linked.project.path="$MODULE_DIR$/../../../ios" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="MeinJumpAndRun" external.system.module.type="sourceSet" external.system.module.version="1.0" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../../ios/build/classes/java/main" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../ios/src">
+      <sourceFolder url="file://$MODULE_DIR$/../../../ios/src" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-backend-robovm:1.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-rt:2.3.16" level="project" />
+    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-cocoatouch:2.3.16" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-platform:natives-ios:1.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-box2d-platform:natives-ios:1.11.0" level="project" />
+    <orderEntry type="module" module-name="MeinJumpAndRun.core.main" />
+    <orderEntry type="library" name="Gradle: com.mobidevelop.robovm:robovm-objc:2.3.16" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx:1.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-box2d:1.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-ai:1.8.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.badlogicgames.gdx:gdx-jnigen-loader:2.3.1" level="project" />
+  </component>
+</module>

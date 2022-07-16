@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MeinJumpAndRun.iml" filepath="$PROJECT_DIR$/.idea/modules/MeinJumpAndRun.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.iml" filepath="$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.main.iml" filepath="$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/android/MeinJumpAndRun.android.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/MeinJumpAndRun.core.iml" filepath="$PROJECT_DIR$/.idea/modules/core/MeinJumpAndRun.core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/MeinJumpAndRun.core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/core/MeinJumpAndRun.core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core/MeinJumpAndRun.core.test.iml" filepath="$PROJECT_DIR$/.idea/modules/core/MeinJumpAndRun.core.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/desktop/MeinJumpAndRun.desktop.iml" filepath="$PROJECT_DIR$/.idea/modules/desktop/MeinJumpAndRun.desktop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/desktop/MeinJumpAndRun.desktop.main.iml" filepath="$PROJECT_DIR$/.idea/modules/desktop/MeinJumpAndRun.desktop.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/desktop/MeinJumpAndRun.desktop.test.iml" filepath="$PROJECT_DIR$/.idea/modules/desktop/MeinJumpAndRun.desktop.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/html/MeinJumpAndRun.html.iml" filepath="$PROJECT_DIR$/.idea/modules/html/MeinJumpAndRun.html.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/html/MeinJumpAndRun.html.main.iml" filepath="$PROJECT_DIR$/.idea/modules/html/MeinJumpAndRun.html.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/html/MeinJumpAndRun.html.test.iml" filepath="$PROJECT_DIR$/.idea/modules/html/MeinJumpAndRun.html.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ios/MeinJumpAndRun.ios.iml" filepath="$PROJECT_DIR$/.idea/modules/ios/MeinJumpAndRun.ios.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ios/MeinJumpAndRun.ios.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ios/MeinJumpAndRun.ios.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ios/MeinJumpAndRun.ios.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ios/MeinJumpAndRun.ios.test.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="1.7">
+      <module name="MeinJumpAndRun.android" target="11" />
+      <module name="MeinJumpAndRun.desktop" target="1.8" />
+      <module name="MeinJumpAndRun.desktop.main" target="1.8" />
+      <module name="MeinJumpAndRun.desktop.test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

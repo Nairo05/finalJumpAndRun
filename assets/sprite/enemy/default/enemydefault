@@ -1,0 +1,27 @@
+
+unnamed.png
+size: 72, 24
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+character
+  rotate: false
+  xy: 0, 0
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 20
+character
+  rotate: false
+  xy: 24, 0
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 19
+character
+  rotate: false
+  xy: 48, 0
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 18
