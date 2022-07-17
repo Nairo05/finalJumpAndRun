@@ -22,6 +22,7 @@ public class Key extends DynamicEntity {
     private Queue<Float> playerY = new Queue<>(preFill);
     private float playerX;
     private boolean isFollowing = false;
+    private boolean used = false;
 
     public Key(World world, float posX, float posY) {
         super(world, posX, posY);
@@ -132,5 +133,13 @@ public class Key extends DynamicEntity {
 
     public void setFollowing() {
         isFollowing = !isFollowing;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }

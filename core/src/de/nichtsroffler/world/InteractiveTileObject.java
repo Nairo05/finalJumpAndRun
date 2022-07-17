@@ -40,6 +40,9 @@ public class InteractiveTileObject extends StaticObject {
         if (getCell().getTile().getId() == 108) {
             getCell().setTile(getTiledMap().getTileSets().getTile(109));
         }
+        if (getCell().getTile().getId() == 150) {
+            getCell().setTile(getTiledMap().getTileSets().getTile(149));
+        }
     }
 
     public TiledMapTileLayer.Cell getCell(){

@@ -26,18 +26,25 @@ public class Hud implements Disposable {
     //Tables
     private final Table timerTable;
     private final Table livesTable;
+    private final Table tableDiamonds;
 
     //Textures
     private final Texture digitsTexture;
     private final Texture livesTexture;
+    private final Texture diamondTexture;
+
     private final TextureRegion[][] digits;
     private final TextureRegion[][] lives;
+    private final TextureRegion[][] diamonds;
 
-    //Image
     private Image liveImage;
+    private Image diamondImage;
 
     private int time;
     private int frameCount = 0;
+
+    private int lastHudLives = 0;
+    private int lastHudDiamonds = -1;
 
 
     public Hud (PlayScreen playScreen, SpriteBatch batch) {
@@ -59,7 +66,6 @@ public class Hud implements Disposable {
 
 
         //Lives
-        int playerLives = 6;
         livesTable = new Table();
         livesTable.top();
         livesTable.left();
@@ -69,6 +75,16 @@ public class Hud implements Disposable {
         lives = TextureRegion.split(livesTexture, 17,16);
 
         liveImage = new Image(lives[0][0]);
+
+
+        //Diamonds
+        tableDiamonds = new Table();
+        tableDiamonds.left();
+        tableDiamonds.top();
+        tableDiamonds.setFillParent(true);
+
+        diamondTexture = new Texture("Hud/diamonds.png");
+        diamonds = TextureRegion.split(diamondTexture, 16, 16);
     }
 
     public void update(float dt) {
@@ -101,37 +117,90 @@ public class Hud implements Disposable {
 
 
         //Lives Management ------------------------------------------------------------
-        livesTable.clear();
 
-        if ((player.getLives()) % 2 == 0) {
+        if (player.getLives() != lastHudLives) {
+            System.out.println("update Hud");
+            livesTable.clear();
 
-            for (int i = 0; i < player.getLives(); i += 2) {
-                liveImage = new Image(lives[0][0]);
-                livesTable.add(liveImage).padLeft(2).padTop(2f);
+            if ((player.getLives()) % 2 == 0) {
+
+                for (int i = 0; i < player.getLives(); i += 2) {
+                    liveImage = new Image(lives[0][0]);
+                    livesTable.add(liveImage).padLeft(3).padTop(2f);
+                }
+
+                for (int i = player.getLives(); i < 6; i += 2) {
+                    liveImage = new Image(lives[0][2]);
+                    livesTable.add(liveImage).padLeft(3).padTop(2f);
+                }
+
+            } else {
+
+                for (int i = 0; i <= player.getLives() - 2; i += 2) {
+                    liveImage = new Image(lives[0][0]);
+                    livesTable.add(liveImage).padLeft(3).padTop(2f);
+                }
+
+                liveImage = new Image(lives[0][1]);
+                livesTable.add(liveImage).padLeft(3).padTop(2f);
+
+                for (int i = player.getLives() + 1; i < 6; i += 2) {
+                    liveImage = new Image(lives[0][2]);
+                    livesTable.add(liveImage).padLeft(3).padTop(2f);
+                }
             }
-
-            for (int i = player.getLives(); i < 6; i += 2) {
-                liveImage = new Image(lives[0][2]);
-                livesTable.add(liveImage).padLeft(2).padTop(2f);
-            }
-
-        } else {
-
-            for (int i = 0; i <= player.getLives()-2; i += 2) {
-                liveImage = new Image(lives[0][0]);
-                livesTable.add(liveImage).padLeft(2).padTop(2f);
-            }
-
-            liveImage = new Image(lives[0][1]);
-            livesTable.add(liveImage).padLeft(2).padTop(2f);
-
-            for (int i = player.getLives() + 1; i < 6; i += 2) {
-                liveImage = new Image(lives[0][2]);
-                livesTable.add(liveImage).padLeft(2).padTop(2f);
-            }
+            stage.addActor(livesTable);
         }
+        lastHudLives = player.getLives();
 
-        stage.addActor(livesTable);
+
+        //Diamond Management ------------------------------------------------------------
+        if (player.getDiamonds() != lastHudDiamonds) {
+            System.out.println("update Hud");
+            tableDiamonds.clear();
+
+            if (player.getDiamonds() == 0) {
+                diamondImage = new Image(diamonds[0][0]);
+                tableDiamonds.add(diamondImage).padLeft(2f).padTop(-10f);
+
+                diamondImage = new Image(diamonds[0][0]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(20f);
+
+                diamondImage = new Image(diamonds[0][0]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(50f);
+            } else if (player.getDiamonds() == 1) {
+                diamondImage = new Image(diamonds[0][1]);
+                tableDiamonds.add(diamondImage).padLeft(2f).padTop(-10f);
+
+                diamondImage = new Image(diamonds[0][0]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(20f);
+
+                diamondImage = new Image(diamonds[0][0]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(50f);
+            } else if (player.getDiamonds() == 2) {
+                diamondImage = new Image(diamonds[0][1]);
+                tableDiamonds.add(diamondImage).padLeft(2f).padTop(-10f);
+
+                diamondImage = new Image(diamonds[0][1]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(20f);
+
+                diamondImage = new Image(diamonds[0][0]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(50f);
+            } else if (player.getDiamonds() == 3) {
+                diamondImage = new Image(diamonds[0][1]);
+                tableDiamonds.add(diamondImage).padLeft(2f).padTop(-10f);
+
+                diamondImage = new Image(diamonds[0][1]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(20f);
+
+                diamondImage = new Image(diamonds[0][1]);
+                tableDiamonds.add(diamondImage).padLeft(-16f).padTop(50f);
+            }
+
+            stage.addActor(tableDiamonds);
+        }
+        lastHudDiamonds = player.getDiamonds();
+
 
         //------------
         stage.act(dt);

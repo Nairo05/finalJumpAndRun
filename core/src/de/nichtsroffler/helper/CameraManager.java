@@ -12,11 +12,13 @@ public class CameraManager {
     private enum CamState {
         DOWN,
         UP,
+        UPPEST,
+        SECRET,
         LOCKED
     }
 
     private static final float LEVEL_START = 2.46f;
-    private static final float LEVEL_END = 29.9f;
+    private static final float LEVEL_END = 39.0f;
     private static final float FINAL_CAM_POSITION = LEVEL_END + 2f;
 
     private final OrthographicCamera camera;
@@ -52,21 +54,21 @@ public class CameraManager {
             }
         }
 
-        /*if (player.getY() > 1.5f) {
-            camState = CamState.DOWN;
-        } else if (player.getY() < 1.25 ) {
+        if (player.getY() > 2.4f && player.isPlayerOnGround()) {
             camState = CamState.UP;
+        } else if (player.getY() < 2.4f) {
+            camState = CamState.DOWN;
         }
 
-        if (camState == CamState.DOWN) {
-            if (camera.position.y < 2.1f) {
-                camera.position.y += dt * 1.2f;
-            }
-        }*/
+       if (camState == CamState.DOWN) {
+           if (camera.position.y > 1.28f) {
+               camera.position.y -= dt * 3f;
+           }
+       }
 
         if (camState == CamState.UP) {
-            if (camera.position.y > 1.06f) {
-                camera.position.y -= dt * 1.4;
+            if (camera.position.y < 2.8f) {
+                camera.position.y += dt * 2f;
             }
         }
 

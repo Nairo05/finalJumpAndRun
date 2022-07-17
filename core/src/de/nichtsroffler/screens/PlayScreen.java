@@ -37,6 +37,7 @@ public class PlayScreen implements Screen {
     private final Viewport viewport;
 
     private final World world;
+    private final MyContactListener contactListener;
     private final TiledMap map;
     private final OrthogonalTiledMapRenderer orthogonalTiledMapRenderer;
 
@@ -59,11 +60,11 @@ public class PlayScreen implements Screen {
         viewport = new ExtendViewport(FinalStatics.VIRTUAL_WIDTH / PPM, FinalStatics.VIRTUAL_HEIGHT / PPM, cameraManager.getCamera());
 
         world = new World(new Vector2(0f,-9.81f), true);
-        ContactListener contactListener = new MyContactListener(this);
+        contactListener = new MyContactListener(this);
         world.setContactListener(contactListener);
 
         TmxMapLoader tmxMapLoader = new TmxMapLoader();
-        map = tmxMapLoader.load("tmx/0-1.tmx");
+        map = tmxMapLoader.load("tmx/0-1test.tmx");
 
         entityManager = new EntityManager(this);
         collectableManager = new CollectableManager(this);
@@ -73,7 +74,7 @@ public class PlayScreen implements Screen {
         orthogonalTiledMapRenderer = new OrthogonalTiledMapRenderer(map,1f / PPM);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
-        player = new Player(world, mapCreator.getPlayerRectangle().x, mapCreator.getPlayerRectangle().y, mapCreator.getKeyRectangle().x, mapCreator.getKeyRectangle().y);
+        player = new Player(this, mapCreator.getPlayerRectangle().x, mapCreator.getPlayerRectangle().y, mapCreator.getKeyRectangle().x, mapCreator.getKeyRectangle().y);
 
         animators.addAll(mapCreator.getAnimators());
         eventQueuer = new EventQueuer();
@@ -175,5 +176,9 @@ public class PlayScreen implements Screen {
 
     public EventQueuer getEventQueuer() {
         return eventQueuer;
+    }
+
+    public MyContactListener getContactListener() {
+        return contactListener;
     }
 }

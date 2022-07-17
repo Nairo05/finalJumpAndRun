@@ -3,9 +3,8 @@ package de.nichtsroffler.dynamicworld.collectable;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -44,7 +43,7 @@ public class Collectable extends DynamicEntity {
         bodyFixtureDef.filter.groupIndex = BitFilterDef.COLLECTIBLE_DEFAULT_BIT;
         bodyFixtureDef.shape = circleShape;
 
-        fixture = body.createFixture(bodyFixtureDef);
+        body.createFixture(bodyFixtureDef).setUserData(this);
 
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape polygonShape = new PolygonShape();
@@ -55,7 +54,7 @@ public class Collectable extends DynamicEntity {
         fixtureDef.isSensor = true;
         fixtureDef.shape = polygonShape;
 
-        body.createFixture(fixtureDef).setUserData(this);
+        fixture = body.createFixture(fixtureDef);
 
         fixture.setUserData(this);
     }
@@ -92,7 +91,7 @@ public class Collectable extends DynamicEntity {
 
             animationCount--;
 
-            speed.add(-0.005f, 0.005f);
+            speed.add(-0.005f, 0.004f);
             textureDistort.add(speed);
 
             if (animationCount < 0) {
@@ -142,5 +141,11 @@ public class Collectable extends DynamicEntity {
 
     public boolean isInAnimation() {
         return inAnimation;
+    }
+
+    protected void overrideGroupIndex(byte group) {
+        Filter filter = fixture.getFilterData();
+        filter.groupIndex = group;
+        fixture.setFilterData(filter);
     }
 }

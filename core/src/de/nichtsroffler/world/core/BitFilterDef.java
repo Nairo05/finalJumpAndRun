@@ -20,6 +20,7 @@ public class BitFilterDef {
     public static final byte COLLECTIBLE_KEY_BIT = 4;
     public static final byte COLLECTIBLE_COIN_BIT = 5;
     public static final byte COLLECTIBLE_DEFAULT_BIT = 6;
+    public static final byte COLLECTIBLE_DIAMOND_BIT = 11;
 
     public static final short ONE_WAY_GROUND = 128;
     public static final short ACTION_BLOCK = 256;
@@ -27,6 +28,8 @@ public class BitFilterDef {
     public static final short INTERACTIVE_TILE_OBJECT = 512;
     public static final byte INTERACTIVE_LEVER = 7;
     public static final byte INTERACTIVE_JUMPPAD = 8;
+    public static final byte INTERACTIVE_SPIKE = 9;
+    public static final byte INTERACTIVE_BUTTON = 10;
 
     public static final byte DEFAULT_ACTION_BLOCK = 8;
     public static final byte LOCK_ACTION_BLOCK = 16;

@@ -5,6 +5,7 @@ import static de.nichtsroffler.main.FinalStatics.PPM;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
@@ -12,9 +13,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 import de.nichtsroffler.dynamicworld.core.DynamicEntity;
+import de.nichtsroffler.screens.PlayScreen;
 import de.nichtsroffler.world.core.BitFilterDef;
 
 public class Player extends DynamicEntity {
+
+    private PlayScreen playScreen;
 
     public enum PrimaryState {
         normal,
@@ -31,13 +35,20 @@ public class Player extends DynamicEntity {
     private AdditionState additionState;
     private Key key;
 
-    private int lives = 6;
-    private int freezeTime = 20;
+    private short lives = 6;
+    private short diamonds = 0;
+    private short coins = 0;
+
+    private int immunCount = 288;
+
     private boolean hitted = false;
     private boolean jumppad = false;
+    private boolean spikeHitted = false;
 
-    public Player(World world, float posX, float posY, float posKeyX, float posKeyY) {
-        super(world, posX, posY);
+    public Player(PlayScreen playScreen, float posX, float posY, float posKeyX, float posKeyY) {
+        super(playScreen.getWorld(), posX, posY);
+
+        this.playScreen = playScreen;
 
         primaryState = PrimaryState.normal;
         additionState = AdditionState.key;
@@ -47,8 +58,20 @@ public class Player extends DynamicEntity {
 
     @Override
     public void update(float dt) {
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-            lives--;
+            diamonds++;
+            System.out.println(diamonds);
+        }
+
+        if (immunCount >= 0) {
+            immunCount--;
+        }
+
+        if (spikeHitted) {
+            body.setLinearVelocity(Vector2.Zero);
+            body.applyLinearImpulse(new Vector2(-1.5f, 1.5f), body.getWorldCenter(), true);
+            spikeHitted = false;
         }
 
         if (jumppad) {
@@ -60,7 +83,6 @@ public class Player extends DynamicEntity {
         }
 
         if(hitted) {
-            freezeTime = 20;
             if (body.getLinearVelocity().x >= 0f) {
                 body.applyLinearImpulse(-2f, 1.5f, body.getWorldCenter().x, body.getWorldCenter().y, true);
             } else {
@@ -69,12 +91,12 @@ public class Player extends DynamicEntity {
             hitted = false;
         }
 
-        if ((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) && body.getPosition().x <= 30f) {
+        if ((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) && body.getPosition().x <= 39f) {
             if (body.getLinearVelocity().x < 1.5f) {
                 float force = 10f * dt;
                 body.applyLinearImpulse(new Vector2(force, 0), body.getWorldCenter(), true);
             }
-        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) && body.getPosition().x <= 30f) {
+        } else if ((Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) && body.getPosition().x <= 39f) {
             if (body.getLinearVelocity().x > -1.5f) {
                 float force = -10f * dt;
                 body.applyLinearImpulse(new Vector2(force, 0), body.getWorldCenter(), true);
@@ -82,9 +104,11 @@ public class Player extends DynamicEntity {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W) || Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             if (primaryState == PrimaryState.normal) {
-                body.applyLinearImpulse(new Vector2(0f, 4.4f), body.getWorldCenter(), true);
-                if (additionState == AdditionState.key) {
-                    key.addPlayerY(4.4f);
+                if (isPlayerOnGround()) {
+                    body.applyLinearImpulse(new Vector2(0f, 4.4f), body.getWorldCenter(), true);
+                    if (additionState == AdditionState.key) {
+                        key.addPlayerY(4.4f);
+                    }
                 }
             }
         } else {
@@ -140,7 +164,7 @@ public class Player extends DynamicEntity {
         fixture = body.createFixture(fixtureDef);
 
         EdgeShape foot = new EdgeShape();
-        foot.set(new Vector2(-2f / PPM, -8f / PPM), new Vector2(2f / PPM, -8f / PPM));
+        foot.set(new Vector2(-5f / PPM, -9f / PPM), new Vector2(5f / PPM, -9f / PPM));
         fixtureDef.shape = foot;
         fixtureDef.isSensor = true;
         fixtureDef.filter.groupIndex = BitFilterDef.PLAYER_BIT_FOOT_INDEX;
@@ -217,13 +241,48 @@ public class Player extends DynamicEntity {
         return key.isFollowing();
     }
 
+    public void useKey() {
+        key.setUsed(true);
+    }
+
+    public boolean keyIsUsed() {
+        return key.isUsed();
+    }
+
     public int getLives() {
         return lives;
     }
 
+    public short getDiamonds() {
+        return diamonds;
+    }
+
     public void looseLife() {
-        lives--;
-        hitted = true;
+        if (!(immunCount > 0)) {
+            lives--;
+            immunCount = 144;
+        }
+        if (!hitted) {
+            hitted = true;
+        }
+    }
+
+    public void collectDiamond() {
+        diamonds++;
+    }
+    public void collectCoin() {
+        coins++;
+        System.out.println(coins);
+    }
+
+    public void spike() {
+        if (!(immunCount > 0)) {
+            immunCount = 300;
+            lives -= 2;
+        }
+        if (!spikeHitted) {
+            spikeHitted = true;
+        }
     }
 
     public boolean isMovingRight() {
@@ -232,5 +291,15 @@ public class Player extends DynamicEntity {
 
     public void jumpPad() {
         jumppad = true;
+    }
+
+    public boolean isPlayerOnGround() {
+        if (playScreen.getContactListener().isPlayerOnGround()){
+            if (Math.abs(body.getLinearVelocity().y) < 0.1f) {
+                System.out.println("Ground");
+                return true;
+            }
+        }
+        return false;
     }
 }

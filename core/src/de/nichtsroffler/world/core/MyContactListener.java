@@ -22,6 +22,7 @@ import de.nichtsroffler.world.StaticCoin;
 public class MyContactListener implements ContactListener {
 
     private final PlayScreen playScreen;
+    private int onGround = 0;
 
     public MyContactListener(PlayScreen playScreen) {
         this.playScreen = playScreen;
@@ -29,6 +30,14 @@ public class MyContactListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
+        if (contact.getFixtureA().getFilterData().categoryBits == BitFilterDef.PLAYER_BIT || contact.getFixtureB().getFilterData().categoryBits == BitFilterDef.PLAYER_BIT) {
+            if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.PLAYER_BIT_FOOT_INDEX
+                || contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.PLAYER_BIT_FOOT_INDEX) {
+                onGround++;
+            }
+        }
+
+
         int checksum = contact.getFixtureA().getFilterData().categoryBits + contact.getFixtureB().getFilterData().categoryBits;
 
         if (checksum == BitFilterDef.PLAYER_REVERSE_VEL) {
@@ -70,11 +79,14 @@ public class MyContactListener implements ContactListener {
 
                     } else if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.LOCK_ACTION_BLOCK) {
 
-                        if (playScreen.getPlayer().hasKey()) {
+                        if (playScreen.getPlayer().hasKey() && !playScreen.getPlayer().keyIsUsed()) {
                             playScreen.getPlayer().setAdditionState(Player.AdditionState.normal);
-                            ((LockQuestionBlock) contact.getFixtureA().getUserData()).getCell().setTile(null);
-
+                            if (((LockQuestionBlock) contact.getFixtureB().getUserData()).getCell().getTile() != null) {
+                                ((LockQuestionBlock) contact.getFixtureA().getUserData()).getCell().setTile(null);
+                                playScreen.getPlayer().useKey();
+                            }
                         }
+
                     }
                 }
 
@@ -98,13 +110,15 @@ public class MyContactListener implements ContactListener {
 
                     } else if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.LOCK_ACTION_BLOCK) {
 
-                        if (playScreen.getPlayer().hasKey()) {
+                        if (playScreen.getPlayer().hasKey() && !playScreen.getPlayer().keyIsUsed()) {
                             playScreen.getPlayer().setAdditionState(Player.AdditionState.normal);
                             if (((LockQuestionBlock) contact.getFixtureB().getUserData()).getCell().getTile() != null) {
                                 ((LockQuestionBlock) contact.getFixtureB().getUserData()).getCell().setTile(null);
 
                                 playScreen.getCollectableManager().aSyncSpawn(BlueDimaond.class,
                                         ((LockQuestionBlock) contact.getFixtureB().getUserData()).getSpawnRectangle());
+
+                                playScreen.getPlayer().useKey();
                             }
                         }
                     }
@@ -125,13 +139,22 @@ public class MyContactListener implements ContactListener {
 
 
                 if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.COLLECTIBLE_COIN_BIT) {
-                    ((StaticCoin) contact.getFixtureA().getUserData()).getCell().setTile(null);
+                    if (((StaticCoin) contact.getFixtureA().getUserData()).getCell().getTile() != null){
+                        ((StaticCoin) contact.getFixtureA().getUserData()).getCell().setTile(null);
+                        playScreen.getPlayer().collectCoin();
+                    }
                 }
 
 
                 if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.COLLECTIBLE_DEFAULT_BIT) {
-                    System.out.println("hit collectable 1");
                     ((Collectable) contact.getFixtureA().getUserData()).onBodyHit();
+                    playScreen.getPlayer().collectCoin();
+                }
+
+                if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.COLLECTIBLE_DIAMOND_BIT) {
+                    ((Collectable) contact.getFixtureA().getUserData()).onBodyHit();
+                    System.out.println("gem");
+                    playScreen.getPlayer().collectDiamond();
                 }
 
 
@@ -145,12 +168,21 @@ public class MyContactListener implements ContactListener {
                 }
 
                 if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.COLLECTIBLE_COIN_BIT) {
-                    ((StaticCoin) contact.getFixtureB().getUserData()).getCell().setTile(null);
+                    if (((StaticCoin) contact.getFixtureB().getUserData()).getCell().getTile() != null) {
+                        ((StaticCoin) contact.getFixtureB().getUserData()).getCell().setTile(null);
+                        playScreen.getPlayer().collectCoin();
+                    }
                 }
 
                 if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.COLLECTIBLE_DEFAULT_BIT) {
-                    System.out.println("hit collectable 2");
                     ((Collectable) contact.getFixtureB().getUserData()).onBodyHit();
+                    playScreen.getPlayer().collectCoin();
+                }
+
+                if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.COLLECTIBLE_DIAMOND_BIT) {
+                    ((Collectable) contact.getFixtureB().getUserData()).onBodyHit();
+                    System.out.println("gem");
+                    playScreen.getPlayer().collectDiamond();
                 }
 
             }
@@ -162,12 +194,20 @@ public class MyContactListener implements ContactListener {
                     switchLever(contact.getFixtureA());
                 } else if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.INTERACTIVE_JUMPPAD) {
                     jumpPad(contact.getFixtureA());
+                } else if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.INTERACTIVE_SPIKE) {
+                    playScreen.getPlayer().spike();
+                } else if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.INTERACTIVE_BUTTON) {
+                    switchButton(contact.getFixtureA());
                 }
             } else if (contact.getFixtureB().getFilterData().categoryBits == BitFilterDef.INTERACTIVE_TILE_OBJECT) {
                 if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.INTERACTIVE_LEVER) {
                     switchLever(contact.getFixtureB());
                 } else if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.INTERACTIVE_JUMPPAD) {
                     jumpPad(contact.getFixtureB());
+                } else if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.INTERACTIVE_SPIKE) {
+                    playScreen.getPlayer().spike();
+                } else if (contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.INTERACTIVE_BUTTON) {
+                    switchButton(contact.getFixtureB());
                 }
             }
         }
@@ -175,7 +215,12 @@ public class MyContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-
+        if (contact.getFixtureA().getFilterData().categoryBits == BitFilterDef.PLAYER_BIT || contact.getFixtureB().getFilterData().categoryBits == BitFilterDef.PLAYER_BIT) {
+            if (contact.getFixtureA().getFilterData().groupIndex == BitFilterDef.PLAYER_BIT_FOOT_INDEX
+                    || contact.getFixtureB().getFilterData().groupIndex == BitFilterDef.PLAYER_BIT_FOOT_INDEX) {
+                onGround--;
+            }
+        }
     }
 
     @Override
@@ -193,6 +238,11 @@ public class MyContactListener implements ContactListener {
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public boolean isPlayerOnGround() {
+        System.out.println(onGround);
+        return onGround > 0;
     }
 
     private void jumpPad(Fixture fixture) {
@@ -215,6 +265,25 @@ public class MyContactListener implements ContactListener {
             playScreen.getEventQueuer().queueEvent(interactiveTileObject, 15);
 
             playScreen.getPlayer().jumpPad();
+        }
+    }
+
+    private void switchButton(Fixture fixture) {
+
+        InteractiveTileObject interactiveTileObject = ((InteractiveTileObject) fixture.getUserData());
+
+        if (interactiveTileObject.getCell().getTile() != null) {
+            int id = interactiveTileObject.getCell().getTile().getId();
+
+            if (id == 149) {
+                id++;
+            }
+
+            interactiveTileObject.onHit(id);
+
+            interactiveTileObject.getCell().setTile(interactiveTileObject.getTiledMap().getTileSets().getTile(id));
+
+            playScreen.getEventQueuer().queueEvent(interactiveTileObject, 600);
         }
     }
 

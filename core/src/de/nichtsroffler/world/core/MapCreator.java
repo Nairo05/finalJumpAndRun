@@ -130,6 +130,12 @@ public class MapCreator {
                 if (mapObject.getName().equalsIgnoreCase("JumpPad")) {
                     new InteractiveTileObject(world, tiledMap, mapObject.getRectangle()).setType(BitFilterDef.INTERACTIVE_JUMPPAD);
                 }
+                if (mapObject.getName().equalsIgnoreCase("Spike")) {
+                    new InteractiveTileObject(world, tiledMap, mapObject.getRectangle()).setType(BitFilterDef.INTERACTIVE_SPIKE);
+                }
+                if (mapObject.getName().equalsIgnoreCase("Button")) {
+                    new InteractiveTileObject(world, tiledMap, mapObject.getRectangle()).setType(BitFilterDef.INTERACTIVE_BUTTON);
+                }
             }
         }
     }
